@@ -98,7 +98,7 @@
 
     <script>
         const SUPABASE_URL = 'https://nyfpynxizosghzwefnfw.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_Vv95nnhVzfUqHZfdL6bMNA_QrvwNbo2';
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY';
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -112,6 +112,7 @@
         const userInfo = document.getElementById('user-info');
         const userEmail = document.getElementById('user-email');
         const fileUploadInput = document.getElementById('file-upload-input');
+        const fileList = document.getElementById('file-list');
 
         googleLoginBtn.addEventListener('click', async () => {
             const { error } = await supabaseClient.auth.signInWithOAuth({
@@ -158,8 +159,37 @@
                 alert('Error: ' + error.message);
             } else {
                 alert('File uploaded successfully!');
+                loadFiles();
             }
         });
+
+        async function loadFiles() {
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) return;
+
+            const { data, error } = await supabaseClient.storage.from('files').list(session.user.id);
+            if (error) {
+                console.error('Error loading files:', error.message);
+                return;
+            }
+
+            if (data && data.length > 0) {
+                fileList.innerHTML = '';
+                data.forEach(file => {
+                    const { data: publicUrlData } = supabaseClient.storage.from('files').getPublicUrl(`${session.user.id}/${file.name}`);
+                    
+                    fileList.innerHTML += `
+                        <div class="bg-slate-50 border border-slate-200 p-4 rounded-xl flex items-center justify-between">
+                            <div class="flex items-center space-x-3 truncate">
+                                <i class="fa-solid fa-file text-indigo-600 text-lg"></i>
+                                <span class="text-sm font-medium text-slate-700 truncate">${file.name.split('_').slice(1).join('_')}</span>
+                            </div>
+                            <a href="${publicUrlData.publicUrl}" target="_blank" class="text-xs bg-indigo-50 text-indigo-600 hover:bg-indigo-100 px-3 py-1.5 rounded-lg font-semibold transition">View</a>
+                        </div>
+                    `;
+                });
+            }
+        }
 
         logoutBtn.addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
@@ -173,6 +203,7 @@
                 appScreen.classList.remove('hidden');
                 userInfo.classList.remove('hidden');
                 userEmail.textContent = session.user.email;
+                loadFiles();
             } else {
                 loginScreen.classList.remove('hidden');
                 appScreen.classList.add('hidden');
