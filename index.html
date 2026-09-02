@@ -4,17 +4,13 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cloud Drive</title>
-    <!-- Tailwind CSS for modern styling -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome for icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Supabase JS Client -->
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 </head>
 <body class="bg-slate-50 text-slate-800 font-sans antialiased min-h-screen flex flex-col">
 
-    <!-- Top Navigation Bar -->
-    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-6 py-4 flex items-center justify-between shadow-xs">
+    <header class="bg-white border-b border-slate-200 sticky top-0 z-30 px-6 py-4 flex items-center justify-between">
         <div class="flex items-center space-x-3">
             <div class="bg-indigo-600 text-white p-2 rounded-xl shadow-sm">
                 <i class="fa-solid fa-cloud text-xl"></i>
@@ -29,9 +25,7 @@
         </div>
     </header>
 
-    <!-- Main Container -->
     <div class="flex flex-1">
-        <!-- Login Screen Section -->
         <div id="login-screen" class="flex-1 flex items-center justify-center p-6">
             <div class="bg-white p-8 rounded-2xl shadow-xl border border-slate-100 max-w-md w-full text-center space-y-6">
                 <div class="w-16 h-16 bg-indigo-50 text-indigo-600 rounded-2xl flex items-center justify-center mx-auto text-2xl shadow-inner">
@@ -42,57 +36,58 @@
                     <p class="text-sm text-slate-500">Securely store and manage your files in the cloud.</p>
                 </div>
                 
-                <div class="space-y-3">
-                    <!-- Google Login Button -->
-                    <button id="google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-xl border border-slate-300 shadow-sm transition active:scale-[0.99]">
-                        <svg class="w-5 h-5" viewBox="0 0 24 24">
-                            <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
-                            <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
-                            <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
-                            <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
-                        </svg>
-                        Continue with Google
-                    </button>
+                <!-- Google Login Button -->
+                <button id="google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-xl border border-slate-300 shadow-sm transition active:scale-[0.99] cursor-pointer">
+                    <svg class="w-5 h-5" viewBox="0 0 24 24">
+                        <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
+                        <path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/>
+                        <path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.06H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.94l2.85-2.22.81-.63z"/>
+                        <path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.06l3.66 2.84c.87-2.6 3.3-4.52 6.16-4.52z"/>
+                    </svg>
+                    Continue with Google
+                </button>
 
-                    <!-- Apple Login Button -->
-                    <button id="apple-login-btn" class="w-full flex items-center justify-center gap-3 bg-black hover:bg-slate-900 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition active:scale-[0.99]">
-                        <i class="fa-brands fa-apple text-xl"></i>
-                        Continue with Apple
-                    </button>
+                <div class="relative flex py-2 items-center">
+                    <div class="flex-grow border-t border-slate-200"></div>
+                    <span class="flex-shrink mx-4 text-slate-400 text-xs uppercase tracking-wider">Or email</span>
+                    <div class="flex-grow border-t border-slate-200"></div>
                 </div>
+
+                <!-- Email & Password Form -->
+                <form id="email-login-form" class="space-y-3 text-left">
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Email Address</label>
+                        <input type="email" id="email-input" required placeholder="teacher@school.edu" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-semibold text-slate-600 mb-1">Password</label>
+                        <input type="password" id="password-input" required placeholder="••••••••" class="w-full px-4 py-2.5 rounded-xl border border-slate-300 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-500">
+                    </div>
+                    <button type="submit" class="w-full bg-indigo-600 hover:bg-indigo-700 text-white font-semibold py-3 px-4 rounded-xl shadow-sm transition active:scale-[0.99] cursor-pointer text-sm">
+                        Sign In / Register with Email
+                    </button>
+                </form>
             </div>
         </div>
 
-        <!-- Dashboard App Screen (Hidden initially) -->
         <div id="app-screen" class="flex-1 flex hidden">
-            <!-- Sidebar -->
             <aside class="w-64 bg-white border-r border-slate-200 p-6 space-y-6 hidden md:block">
-                <div class="space-y-1">
-                    <a href="#" class="flex items-center space-x-3 bg-indigo-50 text-indigo-600 px-4 py-3 rounded-xl font-medium transition">
-                        <i class="fa-solid fa-folder-open"></i>
-                        <span>My Files</span>
-                    </a>
-                </div>
+                <a href="#" class="flex items-center space-x-3 bg-indigo-50 text-indigo-600 px-4 py-3 rounded-xl font-medium">
+                    <i class="fa-solid fa-folder-open"></i>
+                    <span>My Files</span>
+                </a>
             </aside>
-
-            <!-- Main Content Area -->
             <main class="flex-1 p-8 space-y-6">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                    <div>
-                        <h2 class="text-2xl font-bold text-slate-900">My Files</h2>
-                        <p class="text-sm text-slate-500">Manage and upload your documents safely.</p>
-                    </div>
-                    <label class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-xl shadow-md transition cursor-pointer flex items-center space-x-2">
+                <div class="flex justify-between items-center">
+                    <h2 class="text-2xl font-bold text-slate-900">My Files</h2>
+                    <label class="bg-indigo-600 hover:bg-indigo-700 text-white font-medium px-5 py-2.5 rounded-xl cursor-pointer flex items-center space-x-2">
                         <i class="fa-solid fa-cloud-arrow-up"></i>
                         <span>Upload File</span>
                         <input type="file" id="file-upload-input" class="hidden">
                     </label>
                 </div>
-
-                <!-- File Grid / List container -->
-                <div class="bg-white rounded-2xl border border-slate-200 shadow-xs p-6 min-h-[350px]">
+                <div class="bg-white rounded-2xl border border-slate-200 p-6 min-h-[350px]">
                     <div id="file-list" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
-                        <!-- Dynamic files will appear here -->
                         <div class="col-span-full text-center py-12 text-slate-400">
                             <i class="fa-regular fa-folder-open text-4xl mb-3"></i>
                             <p class="text-sm">No files uploaded yet.</p>
@@ -103,57 +98,68 @@
         </div>
     </div>
 
-    <!-- Script wiring your Supabase logic -->
     <script>
         const SUPABASE_URL = 'https://nyfpynxizosghzwefnfw.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_Vv95nnhVzfUqHZfdL6bMNA_QrvwNbo2'; // Replace with your actual anon key
+        const SUPABASE_ANON_KEY = 'YOUR_SUPABASE_ANON_KEY'; // Replace with your publishable key
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
         const loginScreen = document.getElementById('login-screen');
         const appScreen = document.getElementById('app-screen');
         const googleLoginBtn = document.getElementById('google-login-btn');
-        const appleLoginBtn = document.getElementById('apple-login-btn');
+        const emailLoginForm = document.getElementById('email-login-form');
+        const emailInput = document.getElementById('email-input');
+        const passwordInput = document.getElementById('password-input');
         const logoutBtn = document.getElementById('logout-btn');
         const userInfo = document.getElementById('user-info');
         const userEmail = document.getElementById('user-email');
 
-        // Handle Google Sign-in
+        // Google Sign-in
         googleLoginBtn.addEventListener('click', async () => {
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
-                options: {
-                    redirectTo: window.location.href
-                }
+                options: { redirectTo: window.location.href }
             });
-            if (error) alert('Error logging in with Google: ' + error.message);
+            if (error) alert('Error: ' + error.message);
         });
 
-        // Handle Apple Sign-in
-        appleLoginBtn.addEventListener('click', async () => {
-            const { error } = await supabaseClient.auth.signInWithOAuth({
-                provider: 'apple',
-                options: {
-                    redirectTo: window.location.href
+        // Email Sign-in / Sign-up Handler
+        emailLoginForm.addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const email = emailInput.value;
+            const password = passwordInput.value;
+
+            // Try signing in first
+            const { data, error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
+            
+            if (signInError) {
+                // If account doesn't exist, automatically sign them up
+                const { error: signUpError } = await supabaseClient.auth.signUp({ email, password });
+                if (signUpError) {
+                    alert('Error: ' + signUpError.message);
+                } else {
+                    alert('Account created successfully! You are now logged in.');
+                    checkUser();
                 }
-            });
-            if (error) alert('Error logging in with Apple: ' + error.message);
+            } else {
+                checkUser();
+            }
         });
 
-        // Handle Sign Out
+        // Logout
         logoutBtn.addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.reload();
         });
 
-        // Check User Session on Load
+        // Check Session
         async function checkUser() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
                 loginScreen.classList.add('hidden');
                 appScreen.classList.remove('hidden');
                 userInfo.classList.remove('hidden');
-                userEmail.textContent = session.user.email || session.user.id;
+                userEmail.textContent = session.user.email;
             } else {
                 loginScreen.classList.remove('hidden');
                 appScreen.classList.add('hidden');
