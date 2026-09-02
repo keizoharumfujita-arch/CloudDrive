@@ -36,7 +36,6 @@
                     <p class="text-sm text-slate-500">Securely store and manage your files in the cloud.</p>
                 </div>
                 
-                <!-- Google Login Button -->
                 <button id="google-login-btn" class="w-full flex items-center justify-center gap-3 bg-white hover:bg-slate-50 text-slate-700 font-semibold py-3 px-4 rounded-xl border border-slate-300 shadow-sm transition active:scale-[0.99] cursor-pointer">
                     <svg class="w-5 h-5" viewBox="0 0 24 24">
                         <path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92c-.26 1.37-1.04 2.53-2.21 3.31v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.09z"/>
@@ -53,7 +52,6 @@
                     <div class="flex-grow border-t border-slate-200"></div>
                 </div>
 
-                <!-- Email & Password Form -->
                 <form id="email-login-form" class="space-y-3 text-left">
                     <div>
                         <label class="block text-xs font-semibold text-slate-600 mb-1">Email Address</label>
@@ -100,7 +98,7 @@
 
     <script>
         const SUPABASE_URL = 'https://nyfpynxizosghzwefnfw.supabase.co';
-        const SUPABASE_ANON_KEY = 'sb_publishable_Vv95nnhVzfUqHZfdL6bMNA_QrvwNbo2'; // Replace with your publishable key
+        const SUPABASE_ANON_KEY = 'sb_publishable_Vv95nnhVzfUqHZfdL6bMNA_QrvwNbo2';
 
         const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
@@ -113,8 +111,8 @@
         const logoutBtn = document.getElementById('logout-btn');
         const userInfo = document.getElementById('user-info');
         const userEmail = document.getElementById('user-email');
+        const fileUploadInput = document.getElementById('file-upload-input');
 
-        // Google Sign-in
         googleLoginBtn.addEventListener('click', async () => {
             const { error } = await supabaseClient.auth.signInWithOAuth({
                 provider: 'google',
@@ -123,17 +121,14 @@
             if (error) alert('Error: ' + error.message);
         });
 
-        // Email Sign-in / Sign-up Handler
         emailLoginForm.addEventListener('submit', async (e) => {
             e.preventDefault();
             const email = emailInput.value;
             const password = passwordInput.value;
 
-            // Try signing in first
             const { data, error: signInError } = await supabaseClient.auth.signInWithPassword({ email, password });
             
             if (signInError) {
-                // If account doesn't exist, automatically sign them up
                 const { error: signUpError } = await supabaseClient.auth.signUp({ email, password });
                 if (signUpError) {
                     alert('Error: ' + signUpError.message);
@@ -146,13 +141,31 @@
             }
         });
 
-        // Logout
+        fileUploadInput.addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if (!file) return;
+
+            const { data: { session } } = await supabaseClient.auth.getSession();
+            if (!session) {
+                alert('You must be logged in to upload files.');
+                return;
+            }
+
+            const filePath = `${session.user.id}/${Date.now()}_${file.name}`;
+            const { error } = await supabaseClient.storage.from('files').upload(filePath, file);
+            
+            if (error) {
+                alert('Error: ' + error.message);
+            } else {
+                alert('File uploaded successfully!');
+            }
+        });
+
         logoutBtn.addEventListener('click', async () => {
             await supabaseClient.auth.signOut();
             window.location.reload();
         });
 
-        // Check Session
         async function checkUser() {
             const { data: { session } } = await supabaseClient.auth.getSession();
             if (session) {
